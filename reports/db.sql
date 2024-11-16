@@ -30,8 +30,15 @@ CREATE TABLE SocialLinks (
 
 CREATE TABLE Entrepreneur (
     E_ID          INT             PRIMARY KEY,
-    E_CompanyName VARCHAR(50),
     FOREIGN KEY   (E_ID)          REFERENCES Client(C_ID) ON DELETE CASCADE
+);
+
+CREATE TABLE EntrepreneurCompany (
+    EC_ID         INT             PRIMARY KEY AUTO_INCREMENT,
+    E_ID          INT             NOT NULL,
+    EC_Name       VARCHAR(50)     NOT NULL,
+    FOREIGN KEY   (E_ID)          REFERENCES Entrepreneur(E_ID) ON DELETE CASCADE
+
 );
 
 CREATE TABLE Developer (
@@ -82,6 +89,8 @@ CREATE TABLE Task (
 CREATE TABLE Tag (
     TA_ID         INT             PRIMARY KEY AUTO_INCREMENT,
     TA_Name       VARCHAR(50)     NOT NULL
+    PR_ID         INT             NOT NULL,
+    FOREIGN KEY   (PR_ID)         REFERENCES Project(PR_ID) ON DELETE CASCADE
 );
 
 CREATE TABLE TagDetails (
@@ -183,11 +192,173 @@ CREATE TABLE PostTag (
 
 -- Update Client information
 UPDATE Client
-SET C_Username = C_Username,
-    C_Password = C_Password,
-    C_Email = C_Email,
-    C_FirstName = C_FirstName,
-    C_LastName = C_LastName,
-    C_MiddleName = C_MiddleName,
-    C_Education = C_Education
-WHERE C_ID = ID;
+SET C_Username = <Username>,
+    C_Password = <Password>,
+    C_Email = <Email>,
+    C_FirstName = <FirstName>,
+    C_LastName = <LastName>,
+    C_MiddleName = <MiddleName>,
+    C_Education = <Education>
+WHERE C_ID = <ID>;
+
+-- Update Education information
+UPDATE Education
+SET ED_School = <School>,
+    ED_Degree = <Degree>,
+    ED_Field = <Field>,
+    ED_StartDate = <StartDate>,
+    ED_EndDate = <EndDate>
+WHERE ED_ID = <ID>;
+
+
+-- Update SocialLinks information
+UPDATE SocialLinks
+SET SL_Link = <Link>,
+    SL_Type = <Type>
+WHERE SL_ID = <ID>;
+
+--  Get every single project based on the Client
+SELECT * 
+FROM Project
+WHERE PR_ID IN (
+    SELECT PR_ID 
+    FROM JoinCreate 
+    WHERE C_ID = <ID>
+);
+
+-- Get every single client based on the project
+SELECT *
+FROM Client
+WHERE C_ID IN (
+    SELECT C_ID 
+    FROM JoinCreate
+    WHERE PR_ID = <ID>
+);
+
+-- Get the project based on the Post
+SELECT *
+FROM Project
+WHERE PR_ID IN (
+    SELECT PR_ID
+    FROM LinkUp
+    WHERE P_ID = <ID>
+);
+
+-- Get the post based on the Project
+SELECT *
+FROM Post
+WHERE P_ID IN (
+    SELECT P_ID
+    FROM LinkUp
+    WHERE PR_ID = <ID>
+);
+
+-- Get Comments based on the PostTag
+SELECT *
+FROM Comment
+WHERE P_ID IN (
+    SELECT P_ID
+    FROM PostTag
+    WHERE TA_ID = <ID>
+);
+
+-- Get comments based on comments
+SELECT *
+FROM Comment
+WHERE CO_SuperID = <ID>;
+
+-- Get tag based on Post 
+SELECT *
+FROM Tag
+WHERE TA_ID IN (
+    SELECT TA_ID
+    FROM PostTag
+    WHERE P_ID = <ID>
+);
+
+-- Get tag based on ProjectTag
+SELECT *
+FROM Tag
+WHERE TA_ID IN (
+    SELECT TA_ID
+    FROM ProjectTag
+    WHERE PR_ID = <ID>
+);
+
+-- Get tag based on tag details type 
+SELECT *
+FROM Tag
+WHERE TA_ID IN (
+    SELECT TA_ID
+    FROM TagDetails
+    WHERE TD_Type = <TYPE>
+);
+
+-- Get tag details based on TagDetails
+SELECT *
+FROM TagDetails
+WHERE TA_ID = <ID>;
+
+-- Get task based on Project
+SELECT *
+FROM Task
+WHERE PR_ID = <ID>;
+
+-- Get tasks based on client from notify
+SELECT *
+FROM Task
+WHERE TA_ID IN (
+    SELECT TA_ID
+    FROM Notify
+    WHERE C_ID = <ID>
+);
+
+-- Get tasks based on status 
+SELECT *
+FROM Task
+WHERE T_Status = <Status>;
+
+-- Get messages based on client 
+SELECT *
+FROM Message
+WHERE M_ID IN (
+    SELECT M_ID
+    FROM Send
+    WHERE C_ID = <ID>
+);
+
+-- Get all of the E-Company Names
+SELECT EC_Name 
+FROM EntrepreneurCompany;
+
+-- Get all of the Developer Technologies
+SELECT DT_Name
+FROM DeveloperTechnology;
+
+-- Get all of the Admins based on username
+SELECT *
+FROM Admins
+WHERE A_Username LIKE <Username>;
+
+-- Get all of the Clients based on username 
+SELECT *
+FROM Client
+WHERE C_Username LIKE <Username>;
+
+-- Get all of the clients based on education 
+SELECT *
+FROM Client
+WHERE C_ID IN (
+    SELECT C_ID
+    FROM Education
+    WHERE ED_School LIKE <School>
+);
+
+-- Get all of the Entrepreneurs based on company Names
+SELECT *
+FROM Entrepreneur
+WHERE E_ID IN (
+    SELECT E_ID
+    FROM EntrepreneurCompany
+    WHERE EC_Name LIKE <Name>
+);
