@@ -118,7 +118,7 @@ CREATE TABLE Comment (
     CO_Description TEXT,
     CO_Date       DATE,
     CO_SuperID    INT,
-    P_ID          INT,
+    P_ID          INT             NOT NULL,
     C_ID          INT,
     FOREIGN KEY   (CO_SuperID)    REFERENCES Comment(CO_ID) ON DELETE CASCADE,
     FOREIGN KEY   (P_ID)          REFERENCES Post(P_ID) ON DELETE CASCADE,
