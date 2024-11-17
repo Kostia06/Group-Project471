@@ -100,7 +100,6 @@ CREATE TABLE TagDetails (
     TD_ID         INT             PRIMARY KEY AUTO_INCREMENT,
     TA_ID         INT             NOT NULL,
     TD_Type       ENUM("Technology", "Status", "Other"),
-    TD_Name       VARCHAR(50)     NOT NULL,
     FOREIGN KEY   (TA_ID)         REFERENCES Tag(TA_ID) ON DELETE CASCADE
 );
 
