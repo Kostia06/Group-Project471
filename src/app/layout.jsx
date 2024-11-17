@@ -1,5 +1,6 @@
 import { GlobalContextProvider } from "@/containers/GlobalContext";
 import "./globals.css";
+import NavBar from "@/components/Navbar";
 
 export const metadata = {
     title: "Create Next App",
@@ -9,9 +10,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
     return (
         <html lang="en">
-            <body className="h-screen w-screen" >
+            <body className="h-screen w-screen dark:bg-black dark:text-white bg-white text-black duration-700 transition-colors ease-out">
                 <GlobalContextProvider>
-                    {children}
+                    <div className="w-full h-full flex">
+                        <NavBar />
+                        {children}
+                    </div>
                 </GlobalContextProvider>
             </body>
         </html>
