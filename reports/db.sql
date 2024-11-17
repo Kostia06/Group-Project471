@@ -1,7 +1,6 @@
 -- =================================== DATABASE ===================================
 CREATE DATABASE AppDB;
 
-
 CREATE TABLE Client (
     C_ID          INT             PRIMARY KEY AUTO_INCREMENT,
     C_Username    VARCHAR(50)     UNIQUE,
