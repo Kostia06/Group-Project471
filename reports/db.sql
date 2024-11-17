@@ -64,7 +64,6 @@ CREATE TABLE Admin (
     A_FirstName   VARCHAR(50)     NOT NULL,
     A_LastName    VARCHAR(50)     NOT NULL,
     A_MiddleName  VARCHAR(50),
-    A_Auth_Level  INT             NOT NULL
 );
 
 CREATE TABLE Message (
@@ -130,6 +129,8 @@ CREATE TABLE ReportTo (
     RT_ID         INT            PRIMARY KEY AUTO_INCREMENT,
     C_ID          INT            NOT NULL,
     A_ID          INT            NOT NULL,
+    M_ID          INT            NOT NULL,
+    FOREIGN KEY   (M_ID)         REFERENCES Message(M_ID) ON DELETE CASCADE,
     FOREIGN KEY   (C_ID)         REFERENCES Client(C_ID) ON DELETE CASCADE,
     FOREIGN KEY   (A_ID)         REFERENCES Admin(A_ID) ON DELETE CASCADE
 );
