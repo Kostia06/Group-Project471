@@ -143,19 +143,23 @@ CREATE TABLE Manages (
     FOREIGN KEY   (A_ID)          REFERENCES Admin(A_ID) ON DELETE CASCADE
 );
 
-CREATE TABLE Send (
+CREATE TABLE Send_Recieve (
     S_ID          INT             PRIMARY KEY AUTO_INCREMENT,
     M_ID          INT             NOT NULL,
-    C_ID          INT             NOT NULL,
-    FOREIGN KEY   (M_ID)          REFERENCES Message(M_ID) ON DELETE CASCADE
-    FOREIGN KEY   (C_ID)          REFERENCES Client(C_ID) ON DELETE CASCADE
+    C_From_ID     INT             NOT NULL,
+    C_To_ID       INT,
+    PR_ID         INT,
+    FOREIGN KEY   (M_ID)          REFERENCES Message(M_ID) ON DELETE CASCADE,
+    FOREIGN KEY   (C_From_ID)     REFERENCES Client(C_ID) ON DELETE CASCADE,
+    FOREIGN KEY   (C_To_ID)       REFERENCES Client(C_ID) ON DELETE CASCADE,
+    FOREIGN KEY   (PR_ID)         REFERENCES Project(PR_ID) ON DELETE CASCADE
 );
 
 CREATE TABLE Notify (
     N_ID          INT             PRIMARY KEY AUTO_INCREMENT,
     TA_ID         INT             NOT NULL,
     C_ID          INT             NOT NULL,
-    FOREIGN KEY   (TA_ID)         REFERENCES Tag(TA_ID) ON DELETE CASCADE
+    FOREIGN KEY   (TA_ID)         REFERENCES Tag(TA_ID) ON DELETE CASCADE,
     FOREIGN KEY   (C_ID)          REFERENCES Client(C_ID) ON DELETE CASCADE
 );
 
@@ -163,7 +167,7 @@ CREATE TABLE JoinCreate (
     JC_ID         INT            PRIMARY KEY AUTO_INCREMENT,
     PR_ID         INT            NOT NULL,
     C_ID          INT            NOT NULL,
-    FOREIGN KEY   (C_ID)         REFERENCES Client(C_ID) ON DELETE CASCADE
+    FOREIGN KEY   (C_ID)         REFERENCES Client(C_ID) ON DELETE CASCADE,
     FOREIGN KEY   (PR_ID)        REFERENCES Project(PR_ID) ON DELETE CASCADE
 );
 
