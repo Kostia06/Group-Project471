@@ -68,8 +68,7 @@ CREATE TABLE Admin (
 CREATE TABLE Message (
     M_ID          INT             PRIMARY KEY AUTO_INCREMENT,
     M_Description TEXT,
-    M_File        BLOB,
-    M_AtSent      DATETIME,
+    M_File        BLOB
 );
 
 CREATE TABLE Project (
