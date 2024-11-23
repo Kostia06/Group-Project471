@@ -11,6 +11,7 @@ module.exports = {
     theme: {
         extend: {
             colors: {
+                prime: "#ff1178",
                 background: 'hsl(var(--background))',
                 foreground: 'hsl(var(--foreground))',
                 card: {
