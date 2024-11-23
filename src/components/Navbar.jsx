@@ -1,6 +1,16 @@
 "use client";
 import { useGlobalContext } from "@/containers/GlobalContext";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { Input } from "@/components/ui/input"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+  } from "@/components/ui/dialog"
 
 const loggedIn = (user, setUser) => {
     return (
@@ -13,20 +23,24 @@ const loggedIn = (user, setUser) => {
 
 
 const logIn = () => {
-    const redirectToLoginUp = () => {
-
-    }
-
-
 
 
     return (
-        <>
-            <button className="px-6 py-1 bg-prime rounded-full " onClick={redirectToLoginUp}>
+        <Dialog>
+            <DialogTrigger className="px-6 py-1 bg-prime rounded-full">
                 Login
-            </button>
+            </DialogTrigger>
+            <DialogContent className="flex flex-col items-center">
+                <DialogHeader>
+                    <DialogTitle className="text-center text-3xl">
+                        Login
+                    </DialogTitle>
+                </DialogHeader>
+                <Input className="w-60 placeholder:text-opacity-40 border-prime dark:border-prime border-2 " placeholder="username" />
+                <Input className="w-60 placeholder:text-opacity-40  border-prime  dark:border-prime border-2" placeholder="password" />
+            </DialogContent>
 
-        </>
+        </Dialog>
     )
 }
 

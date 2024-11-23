@@ -9,12 +9,14 @@ export const clearLocalStorage = () => {
     localStorage.clear();
 }
 
+
 export const GlobalContextProvider = ({ children }) => {
     // Put all of the global variables here
     const [user, setUser] = useLocalStorage("user", null);
     const [message, setMessage] = useState("message", "Hello World");
 
     const [theme, setTheme] = useLocalStorage("theme", "dark");
+    
     const changeTheme = () => {
         setTheme(theme === "light" ? "dark" : "light");
     }
