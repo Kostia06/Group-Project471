@@ -110,17 +110,7 @@
     body{ 
         @apply dark:bg-black bg-white text-black dark:text-white font-medium;
     }
-
-    .theme-toggle{
-        @apply toggle 
-        dark:[--tglbg:black] [--tglbg:white] 
-        border-0
-        bg-prime hover:bg-prime
-        outline 
-        outline-offset-2 
-        dark:outline-white outline-black 
-        outline-2
-        toggle-lg
-        ;  
-    } 
+    .smooth{
+        @apply duration-300 ease-in-out transition-all
+    }
 }

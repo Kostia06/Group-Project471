@@ -13,10 +13,8 @@ export const clearLocalStorage = () => {
 export const GlobalContextProvider = ({ children }) => {
     // Put all of the global variables here
     const [user, setUser] = useLocalStorage("user", null);
-    const [message, setMessage] = useState("message", "Hello World");
-
     const [theme, setTheme] = useLocalStorage("theme", "dark");
-    
+
     const changeTheme = () => {
         setTheme(theme === "light" ? "dark" : "light");
     }
@@ -31,7 +29,7 @@ export const GlobalContextProvider = ({ children }) => {
 
     return (
         // Pass the global variables here vvvvvvvvvvvvvv
-        <GlobalContext.Provider value={{ user, setUser, message, setMessage, theme, changeTheme, clearLocalStorage }}>
+        <GlobalContext.Provider value={{ user, setUser, theme, changeTheme, clearLocalStorage }}>
             {children}
         </GlobalContext.Provider>
     );
