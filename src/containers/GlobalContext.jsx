@@ -5,6 +5,9 @@ import { useEffect } from 'react';
 
 const GlobalContext = createContext();
 
+
+
+
 export const clearLocalStorage = () => {
     localStorage.clear();
 }
