@@ -1,4 +1,5 @@
 import React from 'react';
+import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import AvatarBauhaus from './avatar-bauhaus';
 import AvatarRing from './avatar-ring';
@@ -6,6 +7,7 @@ import AvatarPixel from './avatar-pixel';
 import AvatarBeam from './avatar-beam';
 import AvatarSunset from './avatar-sunset';
 import AvatarMarble from './avatar-marble';
+
 
 const AVATAR_VARIANTS = {
     pixel: AvatarPixel,
@@ -32,10 +34,11 @@ const Avatar = ({
 }) => {
     const resolvedVariant = DEPRECATED_VARIANTS[variant] || variant;
     const AvatarComponent = AVATAR_VARIANTS[resolvedVariant] || AvatarMarble;
+    const resolvedColors = useMemo(() => colors || [], [colors]);
 
     return (
         <AvatarComponent
-            colors={colors}
+            colors={resolvedColors}
             name={name}
             title={title}
             size={size}

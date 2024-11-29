@@ -6,16 +6,17 @@ import { useEffect } from 'react';
 const GlobalContext = createContext();
 
 
-
+const debug = true;
 
 export const clearLocalStorage = () => {
     localStorage.clear();
 }
 
 
+
 export const GlobalContextProvider = ({ children }) => {
     // Put all of the global variables here
-    const [user, setUser] = useLocalStorage("user", null);
+    const [user, setUser] = useLocalStorage("user", debug ? null : null);
     const [theme, setTheme] = useLocalStorage("theme", "dark");
 
     const changeTheme = () => {
@@ -23,7 +24,7 @@ export const GlobalContextProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        if (theme === "dark")
+        if (!theme || theme === "dark")
             document.documentElement.classList.add("dark");
         else
             document.documentElement.classList.remove("dark");

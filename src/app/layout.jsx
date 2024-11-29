@@ -1,6 +1,7 @@
 import { GlobalContextProvider } from "@/containers/GlobalContext";
 import "./globals.css";
-import NavBar from "@/components/Navbar";
+import NavBar from "@/components/Navbar/index";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata = {
     title: "Create Next App",
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
                         {children}
                     </div>
                 </GlobalContextProvider>
+                <Toaster />
             </body>
         </html>
     );
