@@ -42,4 +42,6 @@
 
 # server static files (if this is intended to ignore server-side static files)
 server/app/static/*
+server/__pycache__ 
+server/app/__pycache__
 
