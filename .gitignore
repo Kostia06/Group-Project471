@@ -43,5 +43,7 @@
 # server static files (if this is intended to ignore server-side static files)
 server/app/static/*
 server/__pycache__ 
+server/.DS_Store 
 server/app/__pycache__
+server/app/routes/__pycache__
 
