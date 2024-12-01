@@ -1,41 +1,45 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-client/node_modules
-/client/.pnp
-.client/pnp.*
-.client/yarn/*
+/client/node_modules/
+/server/.pnp
+/client/.pnp.*
+/.client/yarn/*
 !.client/yarn/patches
 !.client/yarn/plugins
 !.client/yarn/releases
-!client/.yarn/versions
+/client/.yarn/versions/
 
 # testing
-/client/coverage
+/client/coverage/
 
 # next.js
 /client/.next/
 /client/out/
 
 # production
-/client/build
+/client/build/
 
 # misc
-.client/DS_Store
+/.client/DS_Store
 *client/.pem
 
 # debug
-nclient/pm-debug.log*
-yclient/arn-debug.log*
-client/yarn-error.log*
+/client/pm-debug.log*
+/client/yarn-debug.log*
+/client/yarn-error.log*
 
 # env files (can opt-in for committing if needed)
-client/.env*
-client/src/utils/env.js
+.client/.env*
+/client/src/utils/env.js
 
 # vercel
-client/.vercel
+/client/.vercel/
 
 # typescript
-client/*.tsbuildinfo
-client/next-env.d.ts
+/client/*.tsbuildinfo
+/client/next-env.d.ts
+
+# server static files (if this is intended to ignore server-side static files)
+server/app/static/*
+
