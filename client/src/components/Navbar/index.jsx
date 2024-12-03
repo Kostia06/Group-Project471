@@ -1,10 +1,9 @@
 "use client";
-import React from "react";
 import { useState, useEffect } from "react";
 import { useGlobalContext } from '@/containers/GlobalContext';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { colors } from '@/lib/utils';
+import { avatarColors } from "@/lib/consts";
 import Avatar from '@/components/boringAvatars/index.js';
 import { SettingsProfile, SettingsAccount, SettingsEducation } from "./Settings"
 import { RegisterSignUp, RegisterLogIn } from "./Register"
@@ -14,6 +13,7 @@ import { IoIosLogIn } from "react-icons/io";
 
 export default function NavBar() {
     const { user, setUser } = useGlobalContext();
+    const [open, setOpen] = useState(false);
     // pages
     const [currPage, setCurrPage] = useState(0);
     const pages = [
@@ -21,15 +21,15 @@ export default function NavBar() {
             tittle: "Sign Up / Log In",
             trigger: <h1 className="btn rounded-full w-16 h-16 p-2"><IoIosLogIn className="w-full h-full" /></h1>,
             tabs: [
-                { name: "Log In", component: <RegisterLogIn /> },
+                { name: "Log In", component: <RegisterLogIn setOpen={setOpen} /> },
                 { name: "Sign Up", component: <RegisterSignUp /> },
             ],
         },
         {
             tittle: "Settings",
-            trigger: <Avatar name={user?.username} className="w-16 h-16 m-2 avatar" colors={colors} />,
+            trigger: <Avatar name={user?.username} className="w-16 h-16 m-2 avatar" colors={avatarColors} />,
             tabs: [
-                { name: "Profile", component: <SettingsProfile /> },
+                { name: "Profile", component: <SettingsProfile setOpen={setOpen} /> },
                 { name: "Account", component: <SettingsAccount /> },
                 { name: "Education", component: <SettingsEducation /> },
             ],
@@ -51,8 +51,7 @@ export default function NavBar() {
 
     return (
         <div className="flex flex-col items-center space-y-5 h-full p-2 border-r-2 dark:border-zinc-800 border-sec">
-
-            <Dialog>
+            <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger>
                     {pages[currPage].trigger}
                 </DialogTrigger>
@@ -80,9 +79,9 @@ export default function NavBar() {
                             })}
                         </TabsList>
                     </Tabs>
-                    <Avatar name="Sunwoo" className="absolute -top-2 -left-2 w-16 h-16 avatar scale-125 hover:scale-150" colors={colors} />
-                    <Avatar name="Divya" className="absolute bottom-5 left-2 w-16 h-16 avatar" colors={colors} />
-                    <Avatar name="Kostia" className="absolute bottom-1/2 right-6 w-16 h-16 scale-75 avatar" colors={colors} />
+                    <Avatar name="Sunwoo" className="absolute -top-2 -left-2 w-16 h-16 avatar scale-125 hover:scale-150" colors={avatarColors} />
+                    <Avatar name="Divya" className="absolute bottom-5 left-2 w-16 h-16 avatar" colors={avatarColors} />
+                    <Avatar name="Kostia" className="absolute bottom-1/2 right-6 w-16 h-16 scale-75 avatar" colors={avatarColors} />
                     <div className="mask mask-star absolute w-8 h-8 bg-yellow-400 left-1/2 translate-x-20 top-3 -rotate-45 hover:scale-150 hover:rotate-90 smooth" />
                 </DialogContent>
             </Dialog>

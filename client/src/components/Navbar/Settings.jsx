@@ -1,14 +1,14 @@
 "use client";
-import React from "react";
 import { useState, useEffect } from "react";
 import { useGlobalContext } from '@/containers/GlobalContext';
 import { Input } from '@/components/ui/input';
 import { handleUsername, handleRequirments, meetRequirments, handlePassword, handlePassword2 } from "./utils"
-import { colors, apiFetch } from '@/lib/utils';
+import { apiFetch } from '@/lib/utils';
 import Avatar from '@/components/boringAvatars/index.js'
 import { toast } from "sonner"
+import { avatarColors, userReqStruct, passReqStruct } from "@/lib/consts";
 
-export const SettingsProfile = () => {
+export const SettingsProfile = ({ setOpen }) => {
     const { user, setUser, setCurrentProject } = useGlobalContext();
     const [newUser, setNewUser] = useState(user);
 
@@ -17,14 +17,8 @@ export const SettingsProfile = () => {
     }, [user])
 
 
-
-    const [userReq, setUserReq] = useState({
-        "Email is unique": true,
-        "Username is unique": true,
-        "Must not contain profanity": true,
-        "Must be at least 3 characters": true,
-    });
-
+    // Requirments for username
+    const [userReq, setUserReq] = useState(userReqStruct);
     // Fetch usernames and emails
     const [usernames, setUsernames] = useState([]);
     const [emails, setEmails] = useState([]);
@@ -56,6 +50,7 @@ export const SettingsProfile = () => {
         toast("Signed Out");
         setUser(null);
         setCurrentProject(-1);
+        setOpen(false);
     }
 
     const handleDelete = async () => {
@@ -80,7 +75,7 @@ export const SettingsProfile = () => {
                     <Input className="color-input" placeholder={user.email} type="email" />
                 </div>
                 <div className="flex flex-col items-center justify-center">
-                    <Avatar name={newUser.username} className="w-32 h-32 avatar" colors={colors} />
+                    <Avatar name={newUser.username} className="w-32 h-32 avatar" colors={avatarColors} />
                 </div>
             </div>
             <div className="flex items-center justify-evenly w-full">
@@ -102,23 +97,10 @@ export const SettingsAccount = () => {
     const { user, setUser, changeTheme } = useGlobalContext();
     const [newUser, setNewUser] = useState(user);
 
-    useEffect(() => {
-        setNewUser(user);
-    }, [user])
-
+    useEffect(() => setNewUser(user), [user])
 
     // Rerquirments for password
-    const [passReq, setPassReq] = useState({
-        "Must be at least 1 letter": false,
-        "Must be at least 1 number": false,
-        "Must be at least 12 characters": false,
-        "Passwords must match": false,
-    });
-
-    const [userReq, setUserReq] = useState({
-        "Email is unique": true,
-    });
-
+    const [passReq, setPassReq] = useState(passReqStruct);
 
     const handleSave = async () => {
         // check if requirements are met 
