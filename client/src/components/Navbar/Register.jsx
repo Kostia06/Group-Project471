@@ -2,11 +2,13 @@
 import { useState, useEffect } from "react";
 import { useGlobalContext } from '@/containers/GlobalContext';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { handleUsername, handlePassword, handlePassword2, handleEmail, handleRequirments, meetRequirments } from "./utils"
 import { apiFetch } from '@/lib/utils';
 import Avatar from '@/components/boringAvatars/index.js';
 import { toast } from "sonner"
 import { avatarColors, userReqStruct, passReqStruct, signUpStruct, logInStruct } from "@/lib/consts";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, } from "@/components/ui/carousel"
 
 // LogIn Section of Register Page
 export const RegisterLogIn = ({ setOpen }) => {
@@ -20,6 +22,7 @@ export const RegisterLogIn = ({ setOpen }) => {
             return
         }
         const res = await apiFetch("/users/login", { method: "POST", body: JSON.stringify(login) });
+        console.log(res)
         toast(res.message);
 
         if (res.status === "success")
@@ -52,7 +55,7 @@ export const RegisterLogIn = ({ setOpen }) => {
 
 
 // SignUp Section of Register pages
-export const RegisterSignUp = () => {
+export const RegisterSignUp = ({ setOpen }) => {
     const { setUser } = useGlobalContext();
     // Sign up info
     const [signUp, setSignUp] = useState(signUpStruct);
@@ -85,13 +88,14 @@ export const RegisterSignUp = () => {
         }
 
         delete signUp.password2;
-        const res = await apiFetch("/users/signup", { method: "POST", body: JSON.stringify(signUp) });
+        const res = await apiFetch("/users/create", { method: "POST", body: JSON.stringify(signUp) });
         setUser(res.data);
         toast(res.message);
+        setOpen(false);
     }
 
     return (
-        <div className="flex flex-col items-center justify-center w-full h-full space-y-2">
+        <div className="flex flex-col items-center justify-center w-full h-full space-y-2 p-4">
             <div>
                 <Avatar name={signUp.username} className="w-20 h-20 avatar" colors={avatarColors} />
             </div>
@@ -119,7 +123,7 @@ export const RegisterSignUp = () => {
                     </label>
                 </div>
             </div>
-            <div>
+            <div className="w-full flex flex-col items-center">
                 <Input
                     className="color-input min-w-96"
                     placeholder="Full Name"
@@ -162,6 +166,7 @@ export const RegisterSignUp = () => {
                     Sign Up
                 </button>
             </div>
+
         </div>
     )
 }

@@ -9,11 +9,12 @@ import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { Separator } from "@/components/ui/separator";
 import Avatar from "@/components/boringAvatars/index.js";
 
-const Project = ({ projects, setProjects, project }) => {
+const Project = ({ projects, setProjects, setSearch, project }) => {
     const { user, setCurrentProject } = useGlobalContext();
     const handleJoin = async () => {
         const res = await apiFetch(`/projects/join/${project.id}/${user.id}`, { method: "GET" });
-        setProjects([...projects, res.data]);
+        if (!res.joined)
+            setProjects([...projects, res.data]);
         setCurrentProject(project.id);
         setSearch("");
         toast(res.message);
@@ -48,16 +49,25 @@ export default function SearchProjects({ projects, setProjects }) {
             fetchProjects();
     }, [search])
 
+
+    const handleSearch = (e) => {
+        setSearch(e.target.value);
+        if (!e.target.value)
+            setSearchProjects([]);
+    }
+
     return (
 
         <div className="w-full max-h-32 flex flex-col">
             <Input
                 className="border-x-0 rounded-none focus-visible:ring-0"
                 placeholder=" Search"
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={handleSearch}
             />
             <ScrollArea className="max-h-full min-h-0 w-full">
-                {searchProjects.map((project, i) => { <Project key={i} projects={projects} setProjects={setProjects} project={project} /> })}
+                {searchProjects.map((project, i) => (
+                    <Project key={i} projects={projects} setProjects={setProjects} project={project} setSearch={setSearch} />
+                ))}
             </ScrollArea>
         </div>
     )

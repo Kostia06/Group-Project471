@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useGlobalContext } from "@/containers/GlobalContext";
 import { apiFetch } from "@/lib/utils";
-import { fileSize, messageStruct } from "@/lib/consts";
+import { fileSize, messageStruct, fetchMessageSpeed } from "@/lib/consts";
 import { Input } from "@/components/ui/input";
 import { FaFileUpload } from "react-icons/fa";
 import { toast } from "sonner";
@@ -14,7 +14,7 @@ import Tasks from "@/components/Project/Tasks";
 
 // Main Project Component
 export default function Project() {
-    const { currentProject } = useGlobalContext();
+    const { user, currentProject } = useGlobalContext();
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState(messageStruct);
     // Fetch messages
@@ -27,18 +27,15 @@ export default function Project() {
         };
 
         if (currentProject) fetchMessages();
-        const interval = setInterval(fetchMessages, 1000);
+        const interval = setInterval(fetchMessages, fetchMessageSpeed);
 
         return () => clearInterval(interval);
     }, []);
 
 
-
-
     const handleFile = async (e) => {
         const newFiles = [...message.files];
         const filePromises = [];
-
         for (const file of e.target.files) {
             // Limit file size
             if (file.size > fileSize)
@@ -68,7 +65,7 @@ export default function Project() {
         }
     };
 
-    const handleMessage = async (e) => {
+    const handleSendMessage = async (e) => {
         if (e.key !== "Enter")
             return;
 
@@ -80,6 +77,7 @@ export default function Project() {
 
         const updatedMessage = {
             ...message,
+            fromUser: user.id,
             projectId: currentProject,
             description: clean(message.description),
         };
@@ -102,7 +100,7 @@ export default function Project() {
             <div className="w-full h-14 flex items-center justify-end">
                 <Tasks />
             </div>
-            <div className="w-full h-full flex flex-col-reverse overflow-y-auto space-y-5">
+            <div className="w-full h-full flex flex-col overflow-y-auto space-y-5">
                 <Messages messages={messages} />
             </div>
             <div className="w-full h-24 flex items-center justify-center">
@@ -111,7 +109,7 @@ export default function Project() {
                     <Input
                         className="color-input min-w-80"
                         placeholder="Message"
-                        onKeyDown={handleMessage}
+                        onKeyDown={handleSendMessage}
                     />
                     <input id="file" type="file" className="hidden" onChange={handleFile} multiple />
                     <label htmlFor="file" className="m-2 cursor-pointer">

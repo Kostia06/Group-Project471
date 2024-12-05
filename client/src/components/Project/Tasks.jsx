@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { apiFetch } from "@/lib/utils";
-import { taskStruct, statusColors } from "@/lib/consts";
+import { taskStruct, statusColors, fetchTasksSpeed } from "@/lib/consts";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { IoInformationCircleOutline } from "react-icons/io5";
@@ -54,7 +54,7 @@ export default function Tasks() {
                 setTasks(res.data);
         };
 
-        const interval = setInterval(fetchTasks, 1000);
+        const interval = setInterval(fetchTasks, fetchTasksSpeed);
         return () => clearInterval(interval);
     }, [tasks, currentProject]);
     // Create a new task

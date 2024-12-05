@@ -1,4 +1,9 @@
 
+const speed = 200
+export const fetchMessageSpeed = speed
+export const fetchPostSpeed = speed
+export const fetchCommentsSpeed = speed
+export const fetchTasksSpeed = speed
 
 export const avatarColors = ["#ff1178", "#bc13fe", "#fff205", "#Ff5c00", "#7cff01", "#2323ff", "#00cdac", "#C8A2C8"]
 
@@ -19,8 +24,7 @@ export const taskStruct = {
 }
 
 export const messageStruct = {
-    fromUser: "",
-    toUser: "",
+    fromUser: -1,
     project: "",
     files: [],
     description: "",
@@ -58,7 +62,11 @@ export const postStruct = {
     name: "",
     description: "",
     owner: -1,
-    users: [],
     connectProjectId: "",
-    likes: 0,
+}
+
+export const commentStruct = {
+    description: "",
+    fromUser: -1,
+    postId: -1,
 }

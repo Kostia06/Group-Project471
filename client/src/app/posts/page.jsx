@@ -3,6 +3,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { apiFetch } from '@/lib/utils'
 import { useGlobalContext } from '@/containers/GlobalContext'
+import { fetchPostSpeed } from '@/lib/consts'
 import CreatePost from '@/components/Posts/CreatePost'
 import Posts from '@/components/Posts/Posts'
 
@@ -12,10 +13,12 @@ export default function PostsPage() {
 
     useEffect(() => {
         const fetchPosts = async () => {
-            const res = await apiFetch(`/posts/getAll`, { method: "GET" });
-            setPosts(res.data);
+            const lastPostId = posts.length ? posts[posts.length - 1].id : -1
+            const res = await apiFetch(`/posts/getAll/${lastPostId}`, { method: "GET" });
+            if (res.new)
+                setPosts(res.data);
         }
-        const interval = setInterval(fetchPosts, 1000);
+        const interval = setInterval(fetchPosts, fetchPostSpeed);
         return () => clearInterval(interval);
     }, [])
 

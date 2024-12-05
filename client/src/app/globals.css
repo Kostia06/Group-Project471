@@ -128,7 +128,7 @@
     }
 
     .avatar{
-        @apply smooth hover:scale-125 hover:rotate-12
+        @apply smooth hover:scale-125 hover:rotate-12 
     }
     
     .chat-bubble{
