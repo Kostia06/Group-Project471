@@ -33,6 +33,9 @@
 .client/.env*
 /client/src/utils/env.js
 
+/server/app2
+/server/venv
+
 # vercel
 /client/.vercel/
 

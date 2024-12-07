@@ -1,68 +1,136 @@
+from fastapi import APIRouter
 from app.utils import saveDB, loadDB, upload_file, load_file
-from flask import Blueprint, request, jsonify 
+from app.models import Project, Task, Message
 from rapidfuzz import process
+import json
+import time
 
-projects_bp = Blueprint("projects", __name__)
+router = APIRouter()
 
-
-@projects_bp.route("/create", methods=["POST"])
-def handle_create_project():
-    data = request.get_json()
+@router.post("/projects/create")
+def create_project(project: Project):
     db = loadDB()
-    id = len(db["projects"])
-    data["id"] = id
-    db["projects"].projects_bpend(data)
+    project = project.dict()
+    project["id"] = len(db["projects"])
+    db["projects"].append(project)
     saveDB(db)
-    return jsonify({"status": "success","message": "Project successfully created", "data": data})
+    return {"status": "success", "message": "Project successfully created", "data": project}
 
-
-@projects_bp.route("/create", methods=["POST"])
-def handle_project_create():
+@router.post("/projects/update")
+def update_project(project: Project):
     db = loadDB()
-    id = len(db["projects"])
-    data = request.get_json()
-    data["id"] = id
-    db["projects"].projects_bpend(data)
+    project = project.dict()
+    db["projects"][project.get("id")] = project
     saveDB(db)
-    return jsonify({"status": "success","message": "Project successfully created", "data": data})
+    return {"status": "success", "message": "Project updated"}
 
-@projects_bp.route("/update", methods=["POST"])
-def handle_update_project():
-    data = request.get_json()
-    db = loadDB()
-    db["projects"][data.get("id")] = data
-    saveDB(db)
-    return jsonify({"status": "success","message": "Project updated"})
-
-@projects_bp.route("/find/<value>", methods=["GET"])
-def handle_find_project(value):
+@router.get("/projects/find/{value}/{userId}")
+def find_project(value: str, userId: int):
     db = loadDB()
     projects = db["projects"]
     projectNames = [project["name"] for project in projects]
     results = process.extract(value, projectNames, limit=10)
     results = [projects[result[2]] for result in results]
-    return jsonify({"status": "success","data": results})
+    results = [project for project in results if not userId in project["users"]]
+    return {"status": "success", "data": results}
 
-@projects_bp.route("/join/<projectId>/<userId>", methods=["GET"])
-def handle_join_project(projectId, userId):
+@router.get("/projects/join/{projectId}/{userId}")
+def join_project(projectId: int, userId: int):
     db = loadDB()
-    projectId = int(projectId)
-    userId = int(userId)
-    for project in db["projects"]:
-        if project["id"] == projectId:
-            project["users"].projects_bpend(userId)
-            saveDB(db)
-            return jsonify({"status": "success","message": "User successfully joined project", "data": db["projects"][projectId]})
-    return jsonify({"status": "error","message": "Project not found", "data": db["projects"][projectId]})
+    # get the project
+    project = db["projects"][projectId]
+    if userId in project["users"]:
+        return {"status": "error", "joined": True, "message": "User already in project"}
+    project["users"].append(userId)
+    saveDB(db)
+    return {"status": "success", "joined": False, "message": "User successfully joined project", "data": db["projects"][projectId]}
 
 
-@projects_bp.route("/getFromUser/<id>", methods=["GET"])
-def handle_get_projects_from_user(id):
+@router.get("/projects/getFromUser/{id}")
+def get_projects_from_user(id: int):
     db = loadDB()
     projects = []
-    id = int(id)
     for project in db["projects"]:
         if id in project["users"]:
             projects.append(project)
-    return jsonify({"status": "success","data": projects})
+    return {"status": "success", "data": projects}
 
+@router.get("/projects/getFromOwner/{id}")
+def get_projects_from_owner(id: int):
+    db = loadDB()
+    projects = []
+    for project in db["projects"]:
+        if id == project["owner"]:
+            projects.append(project)
+    return {"status": "success", "data": projects}
+
+@router.post("/tasks/create")
+def create_task(task: Task):
+    db = loadDB()
+    task = task.dict()
+    task["id"] = len(db["tasks"])
+    task["date"] = time.time() + 86400
+    db["tasks"].append(task)
+    saveDB(db)
+    return {"status": "success", "message": "Task successfully created"}
+
+@router.get("/tasks/getFromProject/{projectId}/{lastTaskId}")
+def get_tasks_from_project(projectId: int, lastTaskId: int):
+    db = loadDB()
+    tasks = []
+    i = 0
+    while i < len(db["tasks"]): 
+        task = db["tasks"][i]
+        # if task is completed and the due date is passed, remove it
+        if task.get("date") <= time.time() and task.get("status") == "Completed":
+            db["tasks"].remove(task)
+        # if the task in the project, add it 
+        elif task.get("projectId") == id:
+            tasks.append(task)
+        i += 1
+    saveDB(db)
+    # check if front end has to get updated based of lastTaskId
+    if tasks and lastTaskId == tasks[-1]["id"]:
+        return {"status": "success", "data": [], "new": False}
+    return {"status": "success", "new": True, "data": tasks}
+
+@router.post("/tasks/update")
+def update_task(task: Task):
+    db = loadDB()
+    task = task.dict()
+    db["tasks"][task.get("id")] = task
+    if task.get("status") == "completed":
+        # add the future due date by a day 
+        db["tasks"][task.get("id")]["completedAt"] = time.time() + 86400
+    saveDB(db)
+    return {"status": "success", "message": "Task updated"}
+
+@router.post("/messages/create")
+def create_message(message: Message):
+    db = loadDB()
+    message = message.dict()
+    message["id"] = len(db["messages"])
+    message["date"] = time.time()
+    for i, file in enumerate(message.get("files", [])):
+        message["files"][i] = upload_file(file)
+    db["messages"].append(message)
+    saveDB(db)
+    return {"status": "success", "message": "Message successfully sent"}
+
+@router.get("/messages/getFromProject/{projectId}/{lastMessageId}")
+def get_messages_from_project(projectId: int, lastMessageId: int):
+    db = loadDB()
+    messages = [message for message in db["messages"] if message["projectId"] == projectId]
+    if messages and lastMessageId == messages[-1]["id"]:
+        return {"status": "success", "data": [], "new": False}
+
+    for message in messages:
+        for i, file in enumerate(message.get("files", [])):
+            message["files"][i] = load_file(file)
+    return {"status": "success", "new": True, "data": messages[::-1]}
+
+@router.get("/projects/get/tags/{projectId}")
+def get_tags(projectId: int):
+    db = loadDB()
+    tags = [tag for tag in db["tags"] if tag["projectId"] == projectId]
+    return {"status": "success", "data": tags}

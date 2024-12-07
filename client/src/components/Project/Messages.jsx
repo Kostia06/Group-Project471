@@ -138,7 +138,7 @@ const Message = ({ message }) => {
 
     useEffect(() => {
         const handleGetFromUser = async () => {
-            const res = await apiFetch(`/users/getById/${message.fromUser}`, { method: "GET" });
+            const res = await apiFetch(`/users/getByKey/id/${message.fromUser}`, { method: "GET" });
             setFromUser(res.data);
         }
         if (message)
@@ -150,11 +150,11 @@ const Message = ({ message }) => {
             const res = await apiFetch(`/users/get/roleData/${fromUser.id}`, { method: "GET" });
             setFromUserRoleData(res.data);
         }
-        if (fromUser.id != null)
+        if (fromUser?.id != null)
             fetchUserRoleData();
     }, [fromUser])
 
-    if (!user)
+    if (!user || !fromUser || !fromUserRoleData)
         return null;
 
     const side = message.fromUser === user.id ? "chat chat-end p-2" : "chat chat-start m-2";

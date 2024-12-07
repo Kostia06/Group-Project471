@@ -53,9 +53,6 @@ export default function Tasks() {
             if (res.new)
                 setTasks(res.data);
         };
-
-        const interval = setInterval(fetchTasks, fetchTasksSpeed);
-        return () => clearInterval(interval);
     }, [tasks, currentProject]);
     // Create a new task
     const handleCreateTask = async () => {

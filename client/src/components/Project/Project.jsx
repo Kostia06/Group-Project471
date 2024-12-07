@@ -30,7 +30,7 @@ export default function Project() {
         const interval = setInterval(fetchMessages, fetchMessageSpeed);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [currentProject]);
 
 
     const handleFile = async (e) => {

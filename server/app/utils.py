@@ -1,17 +1,26 @@
 import json
 import os 
 import uuid
+from datetime import datetime
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 db_path = dir_path + "/static/db.json"    
 uploads_path = dir_path + "/static/uploads/"
+admin_ids = [0, 1, 2]
+
+
 
 struct = {
     "users": [],
+    "developers": [],
+    "entrepreneurs": [],
     "posts": [],
     "projects": [],
+    "tasks": [],
     "comments": [],
-    "messages": []
+    "messages": [],
+    "posts": [],
+    "blackList": [],
 }
 
 def createDB():
@@ -43,3 +52,7 @@ def load_file(file_id):
     filename = uploads_path + file_id
     with open(filename, "r") as f:
         return json.load(f)
+
+def getTime():
+    dt = datetime.now()
+    return dt.strftime("%m/%d/%Y %H:%M")

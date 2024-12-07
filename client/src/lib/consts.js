@@ -1,5 +1,5 @@
 
-const speed = 200
+const speed = 400
 export const fetchMessageSpeed = speed
 export const fetchPostSpeed = speed
 export const fetchCommentsSpeed = speed
@@ -32,6 +32,12 @@ export const messageStruct = {
     projectId: -1,
 }
 
+export const tagStruct = {
+    values: [],
+    postId: -1,
+    projectId: -1,
+}
+
 export const userReqStruct = {
     "Email is unique": true,
     "Username is unique": true,
@@ -54,8 +60,8 @@ export const signUpStruct = {
 }
 
 export const logInStruct = {
-    "id": "",
-    "password": ""
+    query: "",
+    password: ""
 }
 
 export const postStruct = {

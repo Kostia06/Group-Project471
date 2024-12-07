@@ -26,12 +26,7 @@ const NoProjectSelected = () => {
 
 export default function ProjectsPage() {
     const { user, currentProject } = useGlobalContext();
-    const [project, setProject] = useState([]);
     const [projects, setProjects] = useState([]);
-
-    useEffect(() => {
-        setProject(currentProject);
-    }, [currentProject])
 
     useEffect(() => {
         const fetchProjects = async () => {
@@ -42,7 +37,7 @@ export default function ProjectsPage() {
             fetchProjects();
         else
             setProjects([]);
-    }, [user])
+    }, [user, currentProject])
 
 
     return (
@@ -55,7 +50,7 @@ export default function ProjectsPage() {
                 <SearchProjects projects={projects} setProjects={setProjects} />
                 <JoinedProjects projects={projects} setProjects={setProjects} />
             </div>
-            {(project === -1 || project === undefined)
+            {((currentProject === -1 || currentProject === undefined) || projects.length === 0)
                 ? (<NoProjectSelected />)
                 : (<Project />)
             }

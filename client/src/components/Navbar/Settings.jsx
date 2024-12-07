@@ -33,7 +33,7 @@ export const SettingsProfile = ({ setOpen }) => {
             const res1 = await apiFetch("/users/getByKey/username", { method: "GET" })
             setUsernames(res1.data);
             // fetch emails
-            const res2 = await apiFetch("/users/getByeKey/email", { method: "GET" })
+            const res2 = await apiFetch("/users/get/email", { method: "GET" })
             setEmails(res2.data);
         }
         fetchUsernamesAndEmails();
@@ -180,7 +180,7 @@ export const SettingsAccount = () => {
                                         type="number"
                                         min={0}
                                         onChange={(e) => setNewUserRoleData({ ...newUserRoleData, yearsOfExperience: e.target.value })}
-                                        placeholder={`Yaers of Experience: ${newUserRoleData.yearsOfExperience}`}
+                                        placeholder={`Years of Experience: ${newUserRoleData.yearsOfExperience}`}
                                     />
                                 )
                                 : (

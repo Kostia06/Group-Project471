@@ -7,10 +7,9 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
 }
 
-export async function apiFetch(subDir: string, options: RequestInit = {}) {
-    const url = API + subDir
+export async function apiFetch(url: string, options: RequestInit = {}) {
     try {
-        return await fetch(url, { headers: { "Content-Type": "application/json" }, mode: "cors", ...options })
+        return await fetch(`/api/${url}`, { headers: { "Content-Type": "application/json" }, ...options })
             .then(res => res.json())
     }
     catch (error) {

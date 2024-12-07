@@ -111,12 +111,21 @@
         @apply w-screen h-screen dark:bg-black bg-white text-black dark:text-white font-medium overflow-hidden;
     }
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
 
 @layer components {
 
     .color-input{
-        @apply max-w-64 h-12 placeholder:text-lg placeholder:text-opacity-40 focus:border-prime dark:focus:border-prime border-slate-300 dark:border-white focus:border-2 border-2 focus-visible:ring-0 my-2 !important;
+        @apply max-w-64 h-12 placeholder:text-base placeholder:text-opacity-40 focus:border-prime dark:focus:border-prime border-slate-300 dark:border-white focus:border-2 border-2 focus-visible:ring-0 my-2 !important;
     }
     .btn{
         @apply btn-ghost smooth border-2 border-sec dark:border-white hover:bg-sec dark:hover:bg-white hover:text-prime text-lg font-bold

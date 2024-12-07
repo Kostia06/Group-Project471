@@ -1,6 +1,6 @@
 "use client"
 import { useState } from 'react';
-import { avatarColors } from "@/lib/consts";
+import { avatarColors, tagStruct } from "@/lib/consts";
 import { IoMdAdd } from "react-icons/io";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
 import { Input } from "@/components/ui/input"
@@ -12,6 +12,7 @@ import { useGlobalContext } from '@/containers/GlobalContext';
 export default function CreateProject({ projects, setProjects }) {
     const { user } = useGlobalContext();
     const [projectName, setProjectName] = useState("");
+    const [tag, setTag] = useState(tagStruct);
 
     const handleCreateProject = async () => {
         if (!projectName)
@@ -19,10 +20,27 @@ export default function CreateProject({ projects, setProjects }) {
         if (!user)
             return toast("Please log in to create a project");
         const res = await apiFetch(`/projects/create`, { method: "POST", body: JSON.stringify({ name: projectName, owner: user.id, users: [user.id] }) });
+        tag.projectId = res.data.id;
+        setTag({ ...tag, projectId: res.data.id });
+        await apiFetch(`/tags/create`, { method: "POST", body: JSON.stringify(tag) });
         setProjects([...projects, res.data]);
         setProjectName("");
+        setTag(tagStruct);
         toast(res.message);
     }
+
+
+
+    const handleTags = (e) => {
+        if (e.target.value === "") {
+            tag.values = []
+            setTag({ ...tag });
+            return
+        }
+        tag.values = e.target.value.split(" ")
+        setTag({ ...tag });
+    }
+
 
 
     return (
@@ -38,7 +56,18 @@ export default function CreateProject({ projects, setProjects }) {
                     placeholder="Project Name"
                     onChange={(e) => setProjectName(e.target.value)}
                 />
-
+                <Input
+                    className="color-input min-w-full"
+                    placeholder="Tags"
+                    onChange={handleTags}
+                />
+                <div className="flex flex-wrap space-x-2">
+                    {tag.values.map((tag, i) => (
+                        <h1 key={i} className="px-2 dark:bg-zinc-800 bg-senc rounded-lg">
+                            #{tag}
+                        </h1>
+                    ))}
+                </div>
                 <button className="btn" onClick={handleCreateProject}>
                     Create
                 </button>

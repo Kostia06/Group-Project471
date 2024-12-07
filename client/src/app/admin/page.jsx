@@ -7,6 +7,7 @@ import Avatar from '@/components/boringAvatars/index.js'
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { toast } from "sonner";
+import { redirect } from "next/navigation";
 
 const ArraySocials = ({ socials }) => (
     <div className="flex flex-col py-2">
@@ -42,7 +43,6 @@ const ArrayTechnologies = ({ technologies }) => (
         ))}
     </div>
 )
-
 
 // Component for message from other 
 const MessageFromOther = ({ user }) => {
@@ -132,6 +132,10 @@ export default function AdminPage() {
         const res = await apiFetch(`/users/search/${e.target.value}`, { method: "GET" });
         setUsers(res.data);
     }
+
+    if (user && !user.isAdmin)
+        redirect("/projects");
+
     return (
         <div className="w-full h-full flex flex-wrap items-start justify-start">
             {users.map((user, i) => (<MessageFromOther key={i} user={user} />))}

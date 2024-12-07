@@ -2,13 +2,11 @@
 import { useState, useEffect } from "react";
 import { useGlobalContext } from '@/containers/GlobalContext';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { handleUsername, handlePassword, handlePassword2, handleEmail, handleRequirments, meetRequirments } from "./utils"
 import { apiFetch } from '@/lib/utils';
 import Avatar from '@/components/boringAvatars/index.js';
 import { toast } from "sonner"
 import { avatarColors, userReqStruct, passReqStruct, signUpStruct, logInStruct } from "@/lib/consts";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, } from "@/components/ui/carousel"
 
 // LogIn Section of Register Page
 export const RegisterLogIn = ({ setOpen }) => {
@@ -22,7 +20,6 @@ export const RegisterLogIn = ({ setOpen }) => {
             return
         }
         const res = await apiFetch("/users/login", { method: "POST", body: JSON.stringify(login) });
-        console.log(res)
         toast(res.message);
 
         if (res.status === "success")
