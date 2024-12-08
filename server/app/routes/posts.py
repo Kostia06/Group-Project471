@@ -1,7 +1,10 @@
 from fastapi import APIRouter
-from app.utils import saveDB, loadDB 
-from app.models import Post, Comment 
-import json
+try:
+    from app.utils import saveDB, loadDB 
+    from app.models import Post, Comment 
+except:
+    from utils import saveDB, loadDB 
+    from models import Post, Comment
 
 router = APIRouter()
 

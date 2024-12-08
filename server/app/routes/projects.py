@@ -1,8 +1,11 @@
 from fastapi import APIRouter
-from app.utils import saveDB, loadDB, upload_file, load_file
-from app.models import Project, Task, Message
+try: 
+    from app.utils import saveDB, loadDB, upload_file, load_file
+    from app.models import Project, Task, Message
+except:
+    from utils import saveDB, loadDB, upload_file, load_file
+    from models import Project, Task, Message
 from rapidfuzz import process
-import json
 import time
 
 router = APIRouter()

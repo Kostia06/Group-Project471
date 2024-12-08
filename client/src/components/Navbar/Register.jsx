@@ -32,7 +32,7 @@ export const RegisterLogIn = ({ setOpen }) => {
             <Input
                 className="color-input"
                 placeholder="username or email"
-                onChange={(e) => { setLogin({ ...login, id: e.target.value }) }}
+                onChange={(e) => { setLogin({ ...login, query: e.target.value }) }}
             />
             <Input
                 className="color-input"
@@ -77,6 +77,7 @@ export const RegisterSignUp = ({ setOpen }) => {
         }
         fetchUsernames();
     }, [])
+
     const handleSignUp = async () => {
         // check if requirements are met
         if (!meetRequirments(userReq) || !meetRequirments(passReq)) {

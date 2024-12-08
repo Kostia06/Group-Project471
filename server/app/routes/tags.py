@@ -1,7 +1,10 @@
 from fastapi import APIRouter
-from app.utils import saveDB, loadDB 
-from app.models import Tag
-import json
+try:
+    from app.utils import saveDB, loadDB 
+    from app.models import Tag
+except:
+    from utils import saveDB, loadDB 
+    from models import Tag
 
 router = APIRouter()
 

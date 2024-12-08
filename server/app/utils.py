@@ -6,9 +6,6 @@ from datetime import datetime
 dir_path = os.path.dirname(os.path.realpath(__file__))
 db_path = dir_path + "/static/db.json"    
 uploads_path = dir_path + "/static/uploads/"
-admin_ids = [0, 1, 2]
-
-
 
 struct = {
     "users": [],
@@ -21,6 +18,7 @@ struct = {
     "messages": [],
     "posts": [],
     "blackList": [],
+    "admins": [],
 }
 
 def createDB():
@@ -31,7 +29,7 @@ def loadDB():
     try:
         with open(db_path, "r") as f:
             return json.load(f)
-    except FileNotFoundError:
+    except:
         createDB()
         return loadDB()
 
@@ -43,7 +41,6 @@ def saveDB(data):
 def upload_file(file_content):
     id = str(uuid.uuid4())
     filename = uploads_path + id
-    print(filename)
     with open(filename, "w") as f:
         json.dump(file_content, f)
     return id

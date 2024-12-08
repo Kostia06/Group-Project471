@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils"
 import { isProfane } from "@/lib/bad-words";
+
 export const meetRequirments = (arr) => {
     for (const key in arr)
         if (!arr[key])
@@ -35,7 +36,7 @@ export const handleUsername = (e, userReq, setUserReq, info, setInfo, usernames)
     const target = e.target.value;
     setUserReq({
         ...userReq,
-        "Username is unique": !usernames.includes(target),
+        "Username is unique": !usernames?.includes(target),
         "Must not contain profanity": !isProfane(target),
         "Must be at least 3 characters": target.length >= 3,
     })

@@ -2,6 +2,7 @@ from typing import List
 from pydantic import BaseModel, EmailStr 
 
 class User(BaseModel):
+    name: str = ""
     username: str = ""
     email: EmailStr = ""
     password: str = ""
@@ -60,3 +61,8 @@ class Comment(BaseModel):
     description: str = ""
     fromUser: int = -1
     postId: int = -1
+
+class Admin(BaseModel):
+    id: int = -1
+    username: str = ""
+    email: EmailStr = ""

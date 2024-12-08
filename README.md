@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Guide how to set up
 
-## Getting Started
 
-First, run the development server:
-
+### 1. Set up the server (backend)
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+$ cd server
+$ source venv/bin/activate 
+$ python3 -m app
+```
+### 2. Set up the client (frontend)
+```bash
+$ cd client
+$ yarn run dev
+$ (if yarn is not installed, run npm install -g yarn)
+```
+### 3. Open the website 
+```bash
+$ open http://localhost:3030
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 4. To Look all of the HTTP requests
+```bash
+$ open http://127.0.0.1:5000/docs
+```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### 5. All of the Reports are located in the `reports` folder
+#### Reports
+    - DFD 
+    - HIPO Diagram
+    - Project Proposal
+    - Team Contract
+    - db.sql
+    - EERD
+    - Changes made to EERD 
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 6. Routes are all located inside `server/app/routes`
 
-## Learn More
+### 7. All of the pages are located inside `client/src/app/`
 
-To learn more about Next.js, take a look at the following resources:
+### 8. All of the components are located inside `client/src/components/`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 9. `client/src/container` is where all of the global variables are stored for sharing it across the components and pages.

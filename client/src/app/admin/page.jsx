@@ -15,7 +15,7 @@ const ArraySocials = ({ socials }) => (
             const parsedUrl = new URL(social);
             const name = parsedUrl.hostname
             return (
-                <a key={i} href={data} className="text-xs">
+                <a key={i} href={social} className="text-xs">
                     {name}
                 </a>
             )
@@ -137,11 +137,11 @@ export default function AdminPage() {
         redirect("/projects");
 
     return (
-        <div className="w-full h-full flex flex-wrap items-start justify-start">
+        <div className="w-full h-full flex flex-wrap items-start justify-start overflow-y-scroll">
             {users.map((user, i) => (<MessageFromOther key={i} user={user} />))}
             <div className="absolute bottom-2 right-4">
                 <Input
-                    className="color-input"
+                    className="color-input dark:bg-black bg-white"
                     type="text"
                     placeholder="Search for user"
                     onChange={handleSearch}

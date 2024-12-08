@@ -95,9 +95,7 @@ CREATE TABLE posts (
     name VARCHAR(255) NOT NULL,
     description TEXT,
     owner INT NOT NULL,
-    connect_project_id INT,
     FOREIGN KEY (owner) REFERENCES users(id),
-    FOREIGN KEY (connect_project_id) REFERENCES projects(id)
 );
 
 -- Comments table

@@ -1,0 +1,57 @@
+1. Client.C-Name:
+   - Changed from a composite attribute to a single attribute to simplify the front-end handling. This makes it easier to process and display the client’s name without unnecessary complexity.
+
+2. Client.C-Education:
+   - Removed because the goal is to connect people based on skills rather than educational background. Skills are more relevant to the purpose of the platform than formal education.
+
+3. Client.Social-Links:
+   - Changed from a single attribute to a multivalued attribute to accommodate users with multiple social media links. This allows better flexibility in how social links are managed.
+
+4. Client.Id:
+   - Added as a key for faster backend operations. By using the Id as a key, we achieve constant-time (O(1)) lookup, making data processing more efficient. It also simplifies data access and management by indexing objects.
+
+5. Admin.A-Auth-Level:
+   - Removed because the decision was made that all developers should have the same level of access and capabilities. There's no need to differentiate their authority in the system.
+
+6. Admin.A-Username → Admin.Id:
+   - Changed to Admin.Id for consistency and simplicity. Using an ID instead of a username allows for more efficient backend operations and removes potential issues related to name conflicts or formatting.
+
+7. Removed ReportTo Relationship:
+   - Removed as it was deemed unnecessary for our goal. The relationship didn’t add value to the core functionality of the system, so it was eliminated to reduce complexity.
+
+8. Entrepreneur.Industry:
+   - Added to provide relevant context for entrepreneurs. Knowing the industry is important for our goal of matching individuals based on their business area and expertise.
+
+9. Developer.Years of Experience:
+   - Added to provide a clearer picture of the developer’s expertise. This is important for making better decisions when matching developers to projects based on their experience level.
+
+10. Message:
+    - Added "M-Files" and "M-Date" attributes to capture additional details about each message, such as attached files and the message’s date. This improves the richness and completeness of the message data.
+
+11. Removed M-Client-Username:
+    - Removed because it was redundant. Since it's clear that messages originate from clients based on the "send" relationship, this attribute was unnecessary.
+
+12. Task.T-Created-Date:
+    - Added to help automate task management. The created date allows for tasks that are completed for more than 24 hours to be automatically deleted, ensuring the system stays clean and up-to-date.
+
+13. Project.Pr-Role:
+    - Removed because it was deemed unnecessary for the goal. The role within the project didn’t provide significant value to the project’s functionality or goals.
+
+14. Removed "Link Up" Relationship between Project and Post:
+    - Removed as it didn’t add value to the platform’s objectives. Eliminating this relationship simplifies the model without affecting core functionality.
+
+15. Tag:
+    - Removed "Ta-other", "Ta-status", and "Ta-technology" attributes. Instead, consolidated them into a single multivalued "value" attribute. This simplifies the tagging system while retaining necessary information.
+
+16. Added Relationship between Message and Project:
+    - Added to allow messages to be directly linked to projects. This helps organize communication around specific projects, making it easier to track and manage.
+
+17. Removed Notify Relationship:
+    - Removed because it was deemed unnecessary for the platform's objectives. The relationship didn’t add value, and removing it reduces unnecessary complexity.
+
+18. Post.P-name:
+    - Added because having a name for each post is important for clarity and organization. It makes posts easier to identify and manage.
+
+19. Removed Recursion in Comment:
+    - Removed because it was decided that users should not be able to reply to comments. This simplifies the commenting system and keeps the interaction more straightforward.
+

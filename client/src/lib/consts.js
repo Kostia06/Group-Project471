@@ -71,8 +71,16 @@ export const postStruct = {
     connectProjectId: "",
 }
 
+export const roleDataStruct = {
+    id: -1,
+    technologies: [],
+    companies: [],
+}
+
 export const commentStruct = {
     description: "",
     fromUser: -1,
     postId: -1,
 }
+
+

@@ -45,7 +45,7 @@ const Project = ({ project }) => {
                         <div key={i} className="m-1 p-1 bg-sec dark:bg-zinc-800 rounded-lg text-small">
                             #{tag}
                         </div>
-                    ))e
+                    ))}
                 </div>
             </HoverCardContent>
         </HoverCard>

@@ -12,6 +12,7 @@ export default function SaveButton({ newUser, user, newUserRoleData, userRoleDat
         if (newUser === user && newUserRoleData === userRoleData)
             return toast("No changes made");
         if (newUser !== user) {
+            console.log(newUser)
             await apiFetch("/users/update", { method: "POST", body: JSON.stringify(newUser) });
             setUser(newUser);
         }

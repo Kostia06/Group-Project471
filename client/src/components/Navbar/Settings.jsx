@@ -2,14 +2,13 @@
 import { useState, useEffect } from "react";
 import { useGlobalContext } from '@/containers/GlobalContext';
 import { Input } from '@/components/ui/input';
-import { handleUsername, handleRequirments, meetRequirments, handlePassword, handlePassword2, handleEmail } from "./utils"
+import { handleUsername, handleRequirments, handlePassword, handlePassword2, handleEmail } from "./utils"
 import { apiFetch, cn } from '@/lib/utils';
 import Avatar from '@/components/boringAvatars/index.js'
 import { toast } from "sonner"
-import { avatarColors, userReqStruct, passReqStruct } from "@/lib/consts";
+import { avatarColors, userReqStruct, passReqStruct, roleDataStruct } from "@/lib/consts";
 import { IoMdClose } from "react-icons/io";
 import SaveButton from "./SaveButton";
-import { Label } from "@/components/ui/label";
 
 export const SettingsProfile = ({ setOpen }) => {
     const { user, setUser, setCurrentProject, changeTheme } = useGlobalContext();
@@ -33,7 +32,7 @@ export const SettingsProfile = ({ setOpen }) => {
             const res1 = await apiFetch("/users/getByKey/username", { method: "GET" })
             setUsernames(res1.data);
             // fetch emails
-            const res2 = await apiFetch("/users/get/email", { method: "GET" })
+            const res2 = await apiFetch("/users/getByKey/email", { method: "GET" })
             setEmails(res2.data);
         }
         fetchUsernamesAndEmails();
@@ -95,8 +94,8 @@ export const SettingsProfile = ({ setOpen }) => {
 export const SettingsAccount = () => {
     const { user, setUser, changeTheme } = useGlobalContext();
     const [newUser, setNewUser] = useState(user);
-    const [userRoleData, setUserRoleData] = useState(null);
-    const [newUserRoleData, setNewUserRoleData] = useState(null);
+    const [userRoleData, setUserRoleData] = useState(roleDataStruct);
+    const [newUserRoleData, setNewUserRoleData] = useState(roleDataStruct);
     const [social, setSocial] = useState("")
     const [tech, setTech] = useState("")
     const [comp, setComp] = useState("")
@@ -105,8 +104,10 @@ export const SettingsAccount = () => {
     useEffect(() => {
         const fetchUserRoleData = async () => {
             const res = await apiFetch(`/users/get/roleData/${newUser.id}`, { method: "GET" });
-            setUserRoleData(res.data);
-            setNewUserRoleData(res.data);
+            if (res.data.length === 0)
+                return
+            setUserRoleData(res.data[0]);
+            setNewUserRoleData(res.data[0]);
         }
         fetchUserRoleData();
     }, [user])
@@ -114,9 +115,9 @@ export const SettingsAccount = () => {
     // Rerquirments for password
     const [passReq, setPassReq] = useState(passReqStruct);
 
-
     if (!newUser || !newUserRoleData)
         return null;
+
 
     const handleSocialLink = (e) => {
         if (e.key !== "Enter")
@@ -224,7 +225,7 @@ export const SettingsAccount = () => {
                         </div>
                         <div className="flex flex-col w-full">
                             {newUser.socials.map((social, i) => (
-                                <Link key={i} social={social} newUser={newUser} setNewUser={setNewUser} />
+                                <Link key={i} i={i} social={social} newUser={newUser} setNewUser={setNewUser} />
                             ))}
                         </div>
                     </div>
@@ -311,7 +312,7 @@ const Companies = ({ name, data, setData }) => {
     )
 }
 
-const Link = ({ social, newUser, setNewUser }) => {
+const Link = ({ social, i, newUser, setNewUser }) => {
     const parsedUrl = new URL(social);
     const name = parsedUrl.hostname
     const handleRemove = () => {
