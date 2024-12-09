@@ -8,6 +8,14 @@ CREATE TABLE users (
     isAdmin BOOLEAN DEFAULT FALSE
 );
 
+-- Admins table 
+CREATE TABLE admins (
+    id INT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    FOREIGN KEY (id) REFERENCES users(id)
+);
+
 -- Projects table
 CREATE TABLE projects (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -113,7 +121,9 @@ CREATE TABLE comments (
 SELECT * FROM users WHERE username = :query OR email = :query;
 
 -- Function to create user
-INSERT INTO users (username, email, password, role, isAdmin) VALUES (:username, :email, :password, :role, :isAdmin);
+INSERT INTO users (username, email, password, role, isAdmin)
+VALUES (:username, :email, :password, :role, 
+        EXISTS (SELECT 1 FROM admins WHERE admins.id = (SELECT MAX(id) + 1 FROM users)));
 
 -- Function to create developer (related to user)
 INSERT INTO developers (id, years_of_experience, technologies) VALUES (:user_id, 0, '[]');
