@@ -4,14 +4,16 @@
 ### 1. Set up the server (backend)
 ```bash
 $ cd server
+$ python3 -m venv venv
 $ source venv/bin/activate 
+$ pip install -r requirements.txt
 $ python3 -m app
 ```
 ### 2. Set up the client (frontend)
 ```bash
+$ (if yarn is not installed, run)  npm install -g yarn
 $ cd client
 $ yarn run dev
-$ (if yarn is not installed, run npm install -g yarn)
 ```
 ### 3. Open the website 
 ```bash

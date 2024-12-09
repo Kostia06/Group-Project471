@@ -24,6 +24,8 @@
 /.client/DS_Store
 *client/.pem
 
+/server/venv
+
 # debug
 /client/pm-debug.log*
 /client/yarn-debug.log*
