@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 from pydantic import BaseModel, EmailStr 
 
 class User(BaseModel):
@@ -37,16 +37,24 @@ class Tag(BaseModel):
     projectId: int = -1
 
 class Task(BaseModel):
+    id: int = -1
     name: str = ""
-    date: str = ""
+    date: float = 0
     description: str = ""
     projectId: int = -1
     status: str = "Pending"
 
+class FileInfo(BaseModel):
+    content: str
+    name: str
+    size: int
+    type: str
+
 class Message(BaseModel):
+    id: int = -1
     fromUser: int = -1
     project: str = ""
-    files: List[str] = []
+    files: List[Union[FileInfo, str]] = []
     description: str = ""
     date: str = ""
     projectId: int = -1

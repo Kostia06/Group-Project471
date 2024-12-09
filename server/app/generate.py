@@ -2,7 +2,7 @@ from faker import Faker
 from random import randint, shuffle 
 from routes.users import create_user, create_admin, update_role_data 
 from models import User, Admin, Developer, Entrepreneur
-
+import asyncio
 
 fake = Faker()
 creators = [
@@ -64,16 +64,16 @@ industries = [
 
 names = []
 
-def generateDB():
+async def generateDB():
     users = []
-    users += generateAdmins()
+    users += await generateAdmins()
     users += generateUsers()
     for user, roleData in users:
-        create_user(user)
-        update_role_data(user.id, roleData)
+        await create_user(user)
+        await update_role_data(user.id, roleData)
 
 
-def generateAdmins():
+async def generateAdmins():
     users = []
     for i, user in enumerate(creators):
         if user["name"] in names:
@@ -89,7 +89,7 @@ def generateAdmins():
             roleData = Entrepreneur(**admin_role_data[i])
         else: 
             roleData = Developer(**admin_role_data[i])
-        create_admin(Admin(**admin))
+        await create_admin(Admin(**admin))
         users.append((user, roleData))
         names.append(user.name)
     return users
@@ -155,4 +155,4 @@ def generateUser():
 
 
 if __name__ == "__main__":
-    generateDB()
+    asyncio.run(generateDB())

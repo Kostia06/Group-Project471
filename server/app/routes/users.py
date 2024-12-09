@@ -11,7 +11,7 @@ from rapidfuzz import fuzz
 router = APIRouter()
 
 @router.get("/users/getByKey/{key}/{value}")
-def get_user_by_key(key, value):
+async def get_user_by_key(key, value):
     db = loadDB() 
     try:
         res = [u for u in db["users"] if str(u[key]) == value][0]
@@ -20,14 +20,14 @@ def get_user_by_key(key, value):
         return {"status": "error", "message": "User not found"}
 
 @router.get("/users/getByKey/{key}")
-def get_user_by_key(key):
+async def get_user_by_key(key):
     db = loadDB()
     res = [u[key] for u in db["users"]]
     return {"status": "success", "data": res}
 
 
 @router.post("/users/create")
-def create_user(user: User):
+async def create_user(user: User):
     db = loadDB()
     user = user.dict()
     userId = len(db["users"])
@@ -50,7 +50,7 @@ def create_user(user: User):
     return {"status": "success", "message": "User successfully created"}
 
 @router.post("/users/login")
-def login(login: Login):
+async def login(login: Login):
     db = loadDB()
     login = login.dict()
     # loop through the users
@@ -67,7 +67,7 @@ def login(login: Login):
     return {"status": "error", "message": "User not found"}
 
 @router.post("/users/update")
-def update_user(user: User):
+async def update_user(user: User):
     db = loadDB()
     user = user.dict()
     for i in range(len(db["users"])):
@@ -76,7 +76,7 @@ def update_user(user: User):
     return {"status": "error", "message": "User not found"}
 
 @router.get("/users/delete/{id}")
-def delete_user(id: int):
+async def delete_user(id: int):
     db = loadDB()
     role = db["users"][id]["role"]
     db["users"].pop(id)
@@ -88,7 +88,7 @@ def delete_user(id: int):
     return {"status": "success", "message": "User deleted"}
 
 @router.get("/users/get/roleData/{userId}")
-def get_role_data(userId: int):
+async def get_role_data(userId: int):
     db = loadDB()
     user = db["users"][userId]
     if user["role"] == "Developer":
@@ -98,7 +98,7 @@ def get_role_data(userId: int):
     return {"status": "success", "data": items}
 
 @router.post("/users/update/roleData/{userId}")
-def update_role_data(userId: int, roleData: Union[Developer, Entrepreneur]):
+async def update_role_data(userId: int, roleData: Union[Developer, Entrepreneur]):
     db = loadDB()
     user = db["users"][userId]
     roleData = roleData.dict()
@@ -114,7 +114,7 @@ def update_role_data(userId: int, roleData: Union[Developer, Entrepreneur]):
     return {"status": "success", "message": "Role data updated"}
 
 @router.get("/users/search/{query}")
-def search_user(query: str):
+async def search_user(query: str):
     db = loadDB()
     res = []
     for u in db["users"]:
@@ -132,12 +132,12 @@ def search_user(query: str):
     return {"status": "success", "data": res}
 
 @router.get("/users/isBanned/{userId}")
-def is_banned(userId: int):
+async def is_banned(userId: int):
     db = loadDB()
     return {"status": "success", "data": userId in db["blackList"]}
 
 @router.get("/users/banToggle/{userId}")
-def ban_toggle(userId: int):
+async def ban_toggle(userId: int):
     db = loadDB()
     if userId in db["blackList"]:
         db["blackList"].remove(userId)
@@ -147,7 +147,7 @@ def ban_toggle(userId: int):
     return {"status": "success", "message": "User banned status toggled"}
 
 @router.post("/users/create/admin")
-def create_admin(admin: Admin):
+async def create_admin(admin: Admin):
     db = loadDB()
     admin = admin.dict()
     adminId = len(db["admins"])

@@ -16,16 +16,17 @@ export const statusColors = {
 };
 
 export const taskStruct = {
+    id: -1,
     name: "",
-    date: "",
+    date: 0.0,
     description: "",
     projectId: -1,
     status: "Pending",
 }
 
 export const messageStruct = {
+    id: -1,
     fromUser: -1,
-    project: "",
     files: [],
     description: "",
     date: "",

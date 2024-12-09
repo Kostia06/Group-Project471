@@ -9,7 +9,7 @@ except:
 router = APIRouter()
 
 @router.post("/tags/create")
-def create_tag(tag: Tag):
+async def create_tag(tag: Tag):
     db = loadDB()
     tag = tag.dict()
     tag["id"] = len(db["tags"])

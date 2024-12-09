@@ -88,7 +88,6 @@ CREATE TABLE tasks (
 CREATE TABLE messages (
     id INT AUTO_INCREMENT PRIMARY KEY,
     from_user INT NOT NULL,
-    project VARCHAR(255),
     files TEXT,
     description TEXT,
     date DATE,

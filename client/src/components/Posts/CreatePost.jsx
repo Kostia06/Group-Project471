@@ -24,6 +24,8 @@ export default function CreatePost() {
         setPost({ ...post, owner: user.id });
         setTag({ ...tag, postId: post.id });
         const res = await apiFetch(`/posts/create`, { method: "POST", body: JSON.stringify(post) });
+        tag.postId = res.id;
+        setTag(tag);
         await apiFetch(`/tags/create`, { method: "POST", body: JSON.stringify(tag) });
         setPost(postStruct);
         toast(res.message);
@@ -49,7 +51,7 @@ export default function CreatePost() {
                     <div className="flex items-center w-full p-0">
                         <Input
                             className="color-input rounded-r-none border-r-0 "
-                            placeholder="Task Name"
+                            placeholder="Post Name"
                             onChange={(e) => setPost({ ...post, name: e.target.value })}
                         />
                         <button

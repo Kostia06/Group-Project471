@@ -12,7 +12,7 @@ const Comment = ({ comment }) => {
     const [fromUser, setFromUser] = useState(null);
     useEffect(() => {
         const fetchFromUser = async () => {
-            const res = await apiFetch(`/users/getById/${comment.fromUser}`, { method: "GET" });
+            const res = await apiFetch(`/users/getByKey/id/${comment.fromUser}`, { method: "GET" });
             setFromUser(res.data);
         }
         fetchFromUser();

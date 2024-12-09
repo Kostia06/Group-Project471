@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 try: 
-    from app.utils import saveDB, loadDB, upload_file, load_file
+    from app.utils import saveDB, loadDB, upload_file, load_file, get_time
     from app.models import Project, Task, Message
 except:
-    from utils import saveDB, loadDB, upload_file, load_file
+    from utils import saveDB, loadDB, upload_file, load_file, get_time
     from models import Project, Task, Message
 from rapidfuzz import process
 import time
@@ -11,7 +11,7 @@ import time
 router = APIRouter()
 
 @router.post("/projects/create")
-def create_project(project: Project):
+async def create_project(project: Project):
     db = loadDB()
     project = project.dict()
     project["id"] = len(db["projects"])
@@ -20,7 +20,7 @@ def create_project(project: Project):
     return {"status": "success", "message": "Project successfully created", "data": project}
 
 @router.post("/projects/update")
-def update_project(project: Project):
+async def update_project(project: Project):
     db = loadDB()
     project = project.dict()
     db["projects"][project.get("id")] = project
@@ -28,7 +28,7 @@ def update_project(project: Project):
     return {"status": "success", "message": "Project updated"}
 
 @router.get("/projects/find/{value}/{userId}")
-def find_project(value: str, userId: int):
+async def find_project(value: str, userId: int):
     db = loadDB()
     projects = db["projects"]
     projectNames = [project["name"] for project in projects]
@@ -38,7 +38,7 @@ def find_project(value: str, userId: int):
     return {"status": "success", "data": results}
 
 @router.get("/projects/join/{projectId}/{userId}")
-def join_project(projectId: int, userId: int):
+async def join_project(projectId: int, userId: int):
     db = loadDB()
     # get the project
     project = db["projects"][projectId]
@@ -50,7 +50,7 @@ def join_project(projectId: int, userId: int):
 
 
 @router.get("/projects/getFromUser/{id}")
-def get_projects_from_user(id: int):
+async def get_projects_from_user(id: int):
     db = loadDB()
     projects = []
     for project in db["projects"]:
@@ -59,7 +59,7 @@ def get_projects_from_user(id: int):
     return {"status": "success", "data": projects}
 
 @router.get("/projects/getFromOwner/{id}")
-def get_projects_from_owner(id: int):
+async def get_projects_from_owner(id: int):
     db = loadDB()
     projects = []
     for project in db["projects"]:
@@ -68,7 +68,7 @@ def get_projects_from_owner(id: int):
     return {"status": "success", "data": projects}
 
 @router.post("/tasks/create")
-def create_task(task: Task):
+async def create_task(task: Task):
     db = loadDB()
     task = task.dict()
     task["id"] = len(db["tasks"])
@@ -78,7 +78,7 @@ def create_task(task: Task):
     return {"status": "success", "message": "Task successfully created"}
 
 @router.get("/tasks/getFromProject/{projectId}/{lastTaskId}")
-def get_tasks_from_project(projectId: int, lastTaskId: int):
+async def get_tasks_from_project(projectId: int, lastTaskId: int):
     db = loadDB()
     tasks = []
     i = 0
@@ -88,32 +88,32 @@ def get_tasks_from_project(projectId: int, lastTaskId: int):
         if task.get("date") <= time.time() and task.get("status") == "Completed":
             db["tasks"].remove(task)
         # if the task in the project, add it 
-        elif task.get("projectId") == id:
+        elif task.get("projectId") == projectId:
             tasks.append(task)
         i += 1
     saveDB(db)
     # check if front end has to get updated based of lastTaskId
-    if tasks and lastTaskId == tasks[-1]["id"]:
-        return {"status": "success", "data": [], "new": False}
+    if len(tasks) == 0 or lastTaskId == tasks[-1]["id"]:
+        return {"status": "success", "new": False}
     return {"status": "success", "new": True, "data": tasks}
 
 @router.post("/tasks/update")
-def update_task(task: Task):
+async def update_task(task: Task):
     db = loadDB()
     task = task.dict()
-    db["tasks"][task.get("id")] = task
-    if task.get("status") == "completed":
-        # add the future due date by a day 
+    db["tasks"][task["id"]] = task
+    if task.get("status") == "Completed":
+        # add the future due date by a day
         db["tasks"][task.get("id")]["completedAt"] = time.time() + 86400
     saveDB(db)
     return {"status": "success", "message": "Task updated"}
 
 @router.post("/messages/create")
-def create_message(message: Message):
+async def create_message(message: Message):
     db = loadDB()
     message = message.dict()
     message["id"] = len(db["messages"])
-    message["date"] = time.time()
+    message["date"] = get_time()
     for i, file in enumerate(message.get("files", [])):
         message["files"][i] = upload_file(file)
     db["messages"].append(message)
@@ -121,7 +121,7 @@ def create_message(message: Message):
     return {"status": "success", "message": "Message successfully sent"}
 
 @router.get("/messages/getFromProject/{projectId}/{lastMessageId}")
-def get_messages_from_project(projectId: int, lastMessageId: int):
+async def get_messages_from_project(projectId: int, lastMessageId: int):
     db = loadDB()
     messages = [message for message in db["messages"] if message["projectId"] == projectId]
     if messages and lastMessageId == messages[-1]["id"]:
@@ -133,7 +133,7 @@ def get_messages_from_project(projectId: int, lastMessageId: int):
     return {"status": "success", "new": True, "data": messages[::-1]}
 
 @router.get("/projects/get/tags/{projectId}")
-def get_tags(projectId: int):
+async def get_tags(projectId: int):
     db = loadDB()
     tags = [tag for tag in db["tags"] if tag["projectId"] == projectId]
     return {"status": "success", "data": tags}

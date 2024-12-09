@@ -14,6 +14,7 @@ struct = {
     "posts": [],
     "projects": [],
     "tasks": [],
+    "tags": [],
     "comments": [],
     "messages": [],
     "posts": [],
@@ -50,6 +51,6 @@ def load_file(file_id):
     with open(filename, "r") as f:
         return json.load(f)
 
-def getTime():
+def get_time():
     dt = datetime.now()
     return dt.strftime("%m/%d/%Y %H:%M")
